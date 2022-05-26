@@ -6,7 +6,7 @@ const Todo = require("../models/todoModel");
 // @route GET api/todos
 // access Private
 const getTodos = asyncHandler(async (req, res) => {
-  const todos = await Todo.find();
+  const todos = await Todo.find({ user: req.user.id });
   res.status(200).json(todos);
 });
 
@@ -18,7 +18,9 @@ const createTodo = asyncHandler(async (req, res) => {
     res.status(400).json({ error: "Not a valid value" });
   }
   const todo = await Todo.create({
+    user: req.user.id,
     todoitem: req.body.todoitem,
+    done: req.body.done || false,
     test: "test text",
   });
   res.status(200).json(todo);
